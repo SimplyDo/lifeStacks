@@ -1,25 +1,25 @@
-function stacksController($scope) {
-  
-/*
+function stacksController($scope, $routeParams) {
 
-  // ----------------Init QS SDK -----------------------------------------------
-  var qs = false;
-  QS.setup().then(function (initializedQs) {
-    qs = initializedQs;
-    qs.retrievePlayerInfo().then(function (player) {
-      $scope.playerName = player.name;
-      $scope.$apply();
-    });
-    qs.retrievePlayerData().then(function (data) {
-      if (data.totalFaces) {
-        $scope.totalFaces = data.totalFaces;
-      }
-      $scope.$apply();
-    });
-  })
+  /*
+
+    // ----------------Init QS SDK -----------------------------------------------
+    var qs = false;
+    QS.setup().then(function (initializedQs) {
+      qs = initializedQs;
+      qs.retrievePlayerInfo().then(function (player) {
+        $scope.playerName = player.name;
+        $scope.$apply();
+      });
+      qs.retrievePlayerData().then(function (data) {
+        if (data.totalFaces) {
+          $scope.totalFaces = data.totalFaces;
+        }
+        $scope.$apply();
+      });
+    })
 
 
-*/
+  */
 
 
   // ---------------- Environment Values and Settings --------------------------
@@ -76,12 +76,44 @@ function stacksController($scope) {
   }
 
 
-
-
   // --------------------- Helper Functions ----------------------------
 
   $scope.convertCanvasToImage = function() {
     return c.toDataURL("image/png");
+  }
+
+  $scope.addSlice = function() {
+    var newSlice = {
+      label:"New",
+      percentage:10
+    }
+    $scope.deck.slices.push(newSlice);
+  }
+
+  $scope.removeSlice = function(index) {
+    $scope.deck.slices.splice(index,1);
+  }
+
+  $scope.urlEncode = function(sourceObject) {
+
+    // takes an object and converts it into JSON into an ULR ancode string
+    // see also urlDecode
+
+    var string = angular.toJson(sourceObject);
+    return escape(string);
+  }
+
+  $scope.urlDecode = function(string) {
+
+    // takes an url encode string and converts it to JSON to Object
+    // see also urlEncode
+
+    var cleanString = unescape(string);
+    return angular.fromJson(cleanString);
+  }
+
+  $scope.renderNewStack = function() {
+    $scope.renderStackToCanvas($scope.deck.slices);
   }
 
   $scope.resetCanvas = function() {
@@ -92,10 +124,13 @@ function stacksController($scope) {
     // fill entire canvas
     ctx.fillRect(0,0,CanvasWidth,CanvasHeight);
 
+
+    /*
     // add water mark
     ctx.fillStyle='rgba(255,255,255,0.4)';
     ctx.font = "bold "+ CanvasWidth/25 +"px sans-serif";  
     ctx.fillText(watermark, CanvasWidth/20, CanvasHeight-CanvasHeight/20);
+    */
 
   }
 
@@ -106,6 +141,8 @@ function stacksController($scope) {
     var color;
     var previousColor;
     var labelSize;
+
+    $scope.resetCanvas();
 
 
     for (var i in slices) {
@@ -140,7 +177,7 @@ function stacksController($scope) {
       }
       ctx.fillStyle='rgba(255,255,255,0.9)';
       ctx.font = fontWeight + " " + labelSize +"px sans-serif";  
-      ctx.fillText(slices[i].label, CanvasWidth/35, usedStackHeight-barHeight/2+labelSize/3);
+      ctx.fillText(slices[i].percentage + "% " + slices[i].label, CanvasWidth/35, usedStackHeight-barHeight/2+labelSize/3);
 
     }
 
@@ -155,7 +192,13 @@ function stacksController($scope) {
 
   // --------------------- Init ----------------------------
 
+  if ($routeParams.stack) {
+    $scope.deck.slices = $scope.urlDecode($routeParams.stack);
+  }
+
   $scope.renderStackToCanvas($scope.deck.slices);
 
 
 }
+
+stacksController.$inject = ['$scope', '$routeParams'];
