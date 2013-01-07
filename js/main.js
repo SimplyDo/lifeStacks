@@ -26,11 +26,13 @@ function stacksController($scope) {
   
   var c = document.createElement("canvas");
   var ctx=c.getContext("2d");
-  var CanvasWidth = 400;
-  var CanvasHeight = 400;
+  var CanvasWidth = 800;
+  var CanvasHeight = 800;
   var windowWidth = $(window).width();
   var windowHeight = $(window).height();
-
+  var minFontSize = CanvasHeight/25;
+  var maxFontSize = CanvasHeight/10;
+  var fontWeight = 'bold';
   // Set canvas dimensions
   c.width = CanvasWidth;
   c.height = CanvasHeight;
@@ -56,15 +58,15 @@ function stacksController($scope) {
   // ---- first stack, test
 
   $scope.deck = {
-    "date":"2012",
+    "date":"March 12, 2012",
     "slices": [
       {
         label:"Procrastination",
-        percentage:70
+        percentage:55
       },
       {
-        label:"Learning",
-        percentage:20
+        label:"Up, up and away",
+        percentage:25
       },
       {
         label:"Work",
@@ -100,39 +102,60 @@ function stacksController($scope) {
   $scope.renderStackToCanvas = function(slices) {
 
     var barHeight;
-    var totalStackHeight = 0;
+    var usedStackHeight = 0;
     var color;
     var previousColor;
+    var labelSize;
+
 
     for (var i in slices) {
 
-      // calculate height of bar in pixels
+      //break if stack is too hight (e.g. bad data)
+      if (usedStackHeight > CanvasHeight) {
+        break;
+      }
+
+      // calculate height of slice in pixels
       barHeight = CanvasHeight/100*slices[i].percentage;
 
-      // set slice color
+      // set slice color and make sure adjucent colors are not the same!
       while (color == previousColor) {
         color = colors[Math.floor(Math.random()*colors.length)];
       }
       previousColor = color;
-      ctx.fillStyle=color;
+      ctx.fillStyle = color;
 
-      // render bar
-      ctx.fillRect(0,totalStackHeight,CanvasWidth,totalStackHeight+barHeight);
+      // render slice to canvas
+      ctx.fillRect(0,usedStackHeight,CanvasWidth,usedStackHeight+barHeight);
 
-      // increase drawig starting position
-      totalStackHeight = totalStackHeight + barHeight;
+      // increment height already used up by slices 
+      usedStackHeight = usedStackHeight + barHeight;
+
+      // render label
+      labelSize = barHeight/2;
+      if (labelSize > maxFontSize) {
+        labelSize = maxFontSize;
+      } else if (labelSize < minFontSize) {
+        labelSize = minFontSize;
+      }
+      ctx.fillStyle='rgba(255,255,255,0.9)';
+      ctx.font = fontWeight + " " + labelSize +"px sans-serif";  
+      ctx.fillText(slices[i].label, CanvasWidth/35, usedStackHeight-barHeight/2+labelSize/3);
 
     }
-    
+
+    /*
+    // add water mark once all the slices have been rendered
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.font = "bold "+ CanvasWidth/25 +"px sans-serif";  
+    ctx.fillText(watermark, CanvasWidth/20, CanvasHeight-CanvasHeight/20);
+    */
 
   }
 
   // --------------------- Init ----------------------------
 
-  $scope.resetCanvas();
   $scope.renderStackToCanvas($scope.deck.slices);
-
-
 
 
 }
