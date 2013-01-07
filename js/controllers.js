@@ -96,7 +96,7 @@ function stacksController($scope, $routeParams) {
     return angular.fromJson(cleanString);
   }
 
-  $scope.renderNewStack = function() {
+  $scope.renderStack = function() {
     $scope.renderStackToCanvas($scope.deck.slices);
   }
 

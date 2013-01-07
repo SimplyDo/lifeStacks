@@ -6,14 +6,8 @@
     <li ng-repeat="slice in deck.slices">
       <input type="text" ng-model="slice.label" />
       <input type="text" ng-model="slice.percentage"/>
-      <button ng-click="removeSlice($index);">Remove Slice</button>
+      <a ng-click="removeSlice($index);" class="btn">Remove Slice</a>
     </li>  
   </ul>
-  <button ng-click="addSlice();">Add Slice</button>
+  <a ng-click="addSlice();" class="btn">Add Slice</a> <a href="#/stack/{{urlEncode(deck)}}" class="btn btn-success">Save Stack</a>
 </form>
-
-
-<p>
-  <p><a href="#/stack/{{urlEncode(deck)}}">View Stack</a>
-</p>
-<p>{{urlEncode(deck)}}</p>

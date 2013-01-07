@@ -1,5 +1,16 @@
-<h1>{{deck.title}}</h1>
+
 
 <p><img ng-src="{{convertCanvasToImage()}}" width="400" height="400" /></p>
+<h1>{{deck.title}}</h1>
 
-<p><a href="#/editStack/{{urlEncode(deck)}}">Edit Stack</a>
+
+<ul>
+  <li><a ng-click="renderStack()">Shuffle Colors</a></li>
+  <li><a href="#/editStack/{{urlEncode(deck)}}">Edit this Stack</a></li>
+  <li><a href="#/editStack/">Create a new Stack</a></li>
+</ul>
+
+<p>
+  Permanent url:
+  <input type="text" value="http://lifestacks.dev/#/stack/{{urlEncode(deck)}}"/>
+</p>
