@@ -33,6 +33,11 @@ function stacksController($scope, $routeParams) {
   var minFontSize = CanvasHeight/25;
   var maxFontSize = CanvasHeight/10;
   var fontWeight = 'bold';
+
+  // Get current date
+  var today = new Date();
+  var currentDate = today.getMonth()+1+"/"+today.getDate()+"/"+today.getFullYear();
+
   // Set canvas dimensions
   c.width = CanvasWidth;
   c.height = CanvasHeight;
@@ -55,27 +60,6 @@ function stacksController($scope, $routeParams) {
   var watermark = "SimplyDo.com";
 
 
-  // ---- first stack, test
-
-  $scope.deck = {
-    "title":"March 12, 2012",
-    "slices": [
-      {
-        label:"Work",
-        percentage:60
-      },
-      {
-        label:"Surfing",
-        percentage:10
-      },
-      {
-        label:"Other Stuff",
-        percentage:30
-      }
-    ]
-  }
-
-
   // --------------------- Helper Functions ----------------------------
 
   $scope.convertCanvasToImage = function() {
@@ -96,19 +80,19 @@ function stacksController($scope, $routeParams) {
 
   $scope.urlEncode = function(sourceObject) {
 
-    // takes an object and converts it into JSON into an ULR ancode string
+    // takes an object and converts it into JSON into an ULR encoded string
     // see also urlDecode
 
-    var string = angular.toJson(sourceObject);
-    return escape(string);
+    var cleanString = angular.toJson(sourceObject);
+    return escape(encodeURIComponent(cleanString));
   }
 
-  $scope.urlDecode = function(string) {
+  $scope.urlDecode = function(uri) {
 
-    // takes an url encode string and converts it to JSON to Object
+    // takes an url encoded string and converts it to JSON to Object
     // see also urlEncode
 
-    var cleanString = unescape(string);
+    var cleanString = unescape(decodeURIComponent(uri));
     return angular.fromJson(cleanString);
   }
 
@@ -192,8 +176,27 @@ function stacksController($scope, $routeParams) {
 
   // --------------------- Init ----------------------------
 
+  // if no stack is present in the URL create a default one to use
   if ($routeParams.stack) {
     $scope.deck = $scope.urlDecode($routeParams.stack);
+  } else {
+      $scope.deck = {
+        "title":currentDate,
+        "slices": [
+          {
+            label:"Work",
+            percentage:60
+          },
+          {
+            label:"Surfing",
+            percentage:10
+          },
+          {
+            label:"Other Stuff",
+            percentage:30
+          }
+        ]
+      }
   }
 
   $scope.renderStackToCanvas($scope.deck.slices);

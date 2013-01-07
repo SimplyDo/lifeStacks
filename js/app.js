@@ -7,4 +7,5 @@ angular.module('lifeStacks', []).
     $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'stacksController'});
     $routeProvider.when('/stack/:stack', {templateUrl: 'partials/stack.html', controller: 'stacksController'});
     $routeProvider.when('/editStack/:stack', {templateUrl: 'partials/editStack.html', controller: 'stacksController'});
+    $routeProvider.otherwise({redirectTo:'/'});
   }]);
