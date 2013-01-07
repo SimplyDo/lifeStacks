@@ -26,11 +26,11 @@ function stacksController($scope, $routeParams) {
   
   var c = document.createElement("canvas");
   var ctx=c.getContext("2d");
-  var CanvasWidth = 800;
-  var CanvasHeight = 800;
+  var CanvasWidth = 1200;
+  var CanvasHeight = 750;
   var windowWidth = $(window).width();
   var windowHeight = $(window).height();
-  var minFontSize = CanvasHeight/25;
+  var minFontSize = CanvasHeight/30;
   var maxFontSize = CanvasHeight/10;
   var fontWeight = 'bold';
 
@@ -44,16 +44,12 @@ function stacksController($scope, $routeParams) {
 
   // colors
   var colors = [
-    '#490A3D',
-    '#BD1550',
-    '#E97F02',
-    '#F8CA00',
-    '#8A9B0F',
-    '#547980',
-    '#9E8C89',
-    '#BD657B',
-    '#027ABB',
-    '#7F1416'
+    '#5E412F',
+    '#F9CC36',
+    '#78C0A8',
+    '#F07818',
+    '#F0A830',
+    '#C7E0D0',
   ]
 
   // Watermark
@@ -68,7 +64,7 @@ function stacksController($scope, $routeParams) {
 
   $scope.addSlice = function() {
     var newSlice = {
-      label:"New",
+      label:"",
       percentage:10
     }
     $scope.deck.slices.push(newSlice);
@@ -96,6 +92,22 @@ function stacksController($scope, $routeParams) {
     return angular.fromJson(cleanString);
   }
 
+  $scope.totalPercentage = function() {
+
+    var totalPercentage=0;
+
+    for (var i in $scope.deck.slices) {
+       totalPercentage = totalPercentage + parseInt($scope.deck.slices[i].percentage);
+    }
+
+    return totalPercentage;
+  }
+
+  $scope.totalSlices = function() {
+
+    return $scope.deck.slices.length;
+  }
+
   $scope.renderStack = function() {
     $scope.renderStackToCanvas($scope.deck.slices);
   }
@@ -103,7 +115,7 @@ function stacksController($scope, $routeParams) {
   $scope.resetCanvas = function() {
 
     // set background colour
-    ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];
+    ctx.fillStyle="#EEEEEE";
 
     // fill entire canvas
     ctx.fillRect(0,0,CanvasWidth,CanvasHeight);
@@ -137,7 +149,7 @@ function stacksController($scope, $routeParams) {
       }
 
       // calculate height of slice in pixels
-      barHeight = CanvasHeight/100*slices[i].percentage;
+      barHeight = CanvasHeight/100*parseInt(slices[i].percentage);
 
       // set slice color and make sure adjucent colors are not the same!
       while (color == previousColor) {
@@ -147,7 +159,7 @@ function stacksController($scope, $routeParams) {
       ctx.fillStyle = color;
 
       // render slice to canvas
-      ctx.fillRect(0,usedStackHeight,CanvasWidth,usedStackHeight+barHeight);
+      ctx.fillRect(0,usedStackHeight,CanvasWidth,barHeight);
 
       // increment height already used up by slices 
       usedStackHeight = usedStackHeight + barHeight;
@@ -161,7 +173,12 @@ function stacksController($scope, $routeParams) {
       }
       ctx.fillStyle='rgba(255,255,255,0.9)';
       ctx.font = fontWeight + " " + labelSize +"px sans-serif";  
-      ctx.fillText(slices[i].label, CanvasWidth/35, usedStackHeight-barHeight/2+labelSize/3);
+      ctx.fillText(slices[i].label, minFontSize*3, usedStackHeight-barHeight/2+labelSize/3);
+
+      //Adding percentage read out
+      ctx.fillStyle='rgba(255,255,255,0.6)';
+      ctx.font = fontWeight + " " + minFontSize +"px sans-serif";  
+      ctx.fillText(parseInt(slices[i].percentage)+"%", CanvasWidth/80, usedStackHeight-barHeight/2+labelSize/3);
 
     }
 
@@ -188,12 +205,12 @@ function stacksController($scope, $routeParams) {
             percentage:60
           },
           {
-            label:"Surfing",
-            percentage:10
+            label:"Sleep",
+            percentage:30
           },
           {
-            label:"Other Stuff",
-            percentage:30
+            label:"Fun",
+            percentage:10
           }
         ]
       }

@@ -1,16 +1,21 @@
 
+<div class="row">
+  <div class="span10">
+    <h1>{{deck.title}}</h1>
+  </div>
+  <div class="span10">
+    <p><img ng-src="{{convertCanvasToImage()}}" /></p>
 
-<p><img ng-src="{{convertCanvasToImage()}}" width="400" height="400" /></p>
-<h1>{{deck.title}}</h1>
-
-
-<ul>
-  <li><a ng-click="renderStack()">Shuffle Colors</a></li>
-  <li><a href="#/editStack/{{urlEncode(deck)}}">Edit this Stack</a></li>
-  <li><a href="#/editStack/">Create a new Stack</a></li>
-</ul>
-
-<p>
-  Permanent url:
-  <input type="text" value="http://lifestacks.dev/#/stack/{{urlEncode(deck)}}"/>
-</p>
+  </div>
+  <div class="span2">
+    <p><a ng-click="renderStack()" class="btn" title="Shuffle colors"><i class="icon-refresh"></i></a></p>
+    <p><a href="#/editStack/{{urlEncode(deck)}}" title="Edit/Create new stack" class="btn"><i class="icon-pencil"></i></a></p>
+  </div>
+  <div class="span12">
+    <div class="permanent">
+      <hr />
+      <label for="permanentUrl">Permanent URL for this stack</label>
+      <input type="text" id="permanentUrl" rows="8" class="span10" value="http://lifestacks.dev/#/stack/{{urlEncode(deck)}}" />
+    </div>
+  </div>
+</div>

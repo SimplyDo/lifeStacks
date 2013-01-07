@@ -1,13 +1,57 @@
-<h1>Edit Stack</h1>
+<div class="row">
+  <div class="span12">
+    <h1>Edit Stack</h1>
+  </div>
+  <div class="span3">
+    <p>You can create as many stacks as you like.</p>
+    <p>Make sure to retain the unique url for each stack you want to keep.</p>
+    <p>Since each stack is just an image you can download and use them anywhere.</p>
+  </div>
+  <div class="span9">
+    <from class="form-horizontal">
+      <div class="control-group">
 
-<from>
-  <ul>
-    <input type="text" ng-model="deck.title"/>
-    <li ng-repeat="slice in deck.slices">
-      <input type="text" ng-model="slice.label" />
-      <input type="text" ng-model="slice.percentage"/>
-      <a ng-click="removeSlice($index);" class="btn">Remove Slice</a>
-    </li>  
-  </ul>
-  <a ng-click="addSlice();" class="btn">Add Slice</a> <a href="#/stack/{{urlEncode(deck)}}" class="btn btn-success">Save Stack</a>
-</form>
+        <label for="title" class="control-label">Stack Title</label>
+        <div class="controls">
+          <input type="text" id="title" ng-model="deck.title"/>
+          <hr />
+        </div>
+      </div>
+      
+      <div ng-repeat="slice in deck.slices" class="control-group slice">
+        <label class="control-label">{{$index+1}}. Slice</label>
+        
+        <div class="controls">
+          <input type="text" ng-model="slice.label" placeholder="Label" />
+          <div class="input-append">
+            <input class="span1" ng-model="slice.percentage" id="appendedPrependedInput" type="text">
+            <span class="add-on">%</span>
+          </div>
+          <a ng-click="removeSlice($index);" ng-hide="totalSlices() <= 2"><i class="icon-trash"></i></a>
+        </div>
+        
+      </div>
+      
+      <div class="control-group">
+
+        <div class="controls">
+          
+          <p><a ng-click="addSlice();" ng-hide="totalSlices() > 4" class=""><i class="icon-plus-sign"></i> Add Slice</a></p>
+          <p ng-show="totalSlices() > 4" class="alert alert-info">You have reached the maximum of 6 slices. We recommend to use 5 or less.</p>
+          <p ng-show="totalPercentage() > 100" class="alert alert-error">Your {{totalSlices()}} slices are an impossible {{totalPercentage()}}% heigh!<br /><strong>Please remove {{totalPercentage()-100}}%</strong></p>
+          <hr />
+          <a href="#/stack/{{urlEncode(deck)}}" class="btn btn-primary">View Stack</a>
+        </div>
+      </div>
+       
+    </form>
+  </div>
+
+  <div class="span12">
+    <div class="permanent">
+      <hr />
+      <label for="permanentUrl">Permanent URL for this stack</label>
+      <input type="text" id="permanentUrl" class="span10" value="http://lifestacks.dev/#/stack/{{urlEncode(deck)}}" />
+    </div>
+  </div>
+</div>
