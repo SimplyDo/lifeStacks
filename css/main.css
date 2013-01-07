@@ -21,3 +21,8 @@ div.permanent {
 div.permanent label {
   color:#999;
 }
+
+p.header {
+  margin:0.5em 0px;
+  color:#999;
+}
