@@ -58,19 +58,19 @@ function stacksController($scope, $routeParams) {
   // ---- first stack, test
 
   $scope.deck = {
-    "date":"March 12, 2012",
+    "title":"March 12, 2012",
     "slices": [
       {
-        label:"Procrastination",
-        percentage:55
-      },
-      {
-        label:"Up, up and away",
-        percentage:25
-      },
-      {
         label:"Work",
+        percentage:60
+      },
+      {
+        label:"Surfing",
         percentage:10
+      },
+      {
+        label:"Other Stuff",
+        percentage:30
       }
     ]
   }
@@ -177,7 +177,7 @@ function stacksController($scope, $routeParams) {
       }
       ctx.fillStyle='rgba(255,255,255,0.9)';
       ctx.font = fontWeight + " " + labelSize +"px sans-serif";  
-      ctx.fillText(slices[i].percentage + "% " + slices[i].label, CanvasWidth/35, usedStackHeight-barHeight/2+labelSize/3);
+      ctx.fillText(slices[i].label, CanvasWidth/35, usedStackHeight-barHeight/2+labelSize/3);
 
     }
 
@@ -193,7 +193,7 @@ function stacksController($scope, $routeParams) {
   // --------------------- Init ----------------------------
 
   if ($routeParams.stack) {
-    $scope.deck.slices = $scope.urlDecode($routeParams.stack);
+    $scope.deck = $scope.urlDecode($routeParams.stack);
   }
 
   $scope.renderStackToCanvas($scope.deck.slices);

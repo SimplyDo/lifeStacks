@@ -2,6 +2,7 @@
 
 <from>
   <ul>
+    <input type="text" ng-model="deck.title"/>
     <li ng-repeat="slice in deck.slices">
       <input type="text" ng-model="slice.label" />
       <input type="text" ng-model="slice.percentage"/>
@@ -9,14 +10,10 @@
     </li>  
   </ul>
   <button ng-click="addSlice();">Add Slice</button>
-  <button ng-click="renderNewStack();">Update Stack</button>
 </form>
 
-<p>
-  <img ng-init="renderNewStack();" ng-src="{{convertCanvasToImage()}}" width="400" height="400" />
-</p>
 
 <p>
-  <p><a href="#/stack/{{deck.slices}}">View stack</a>
+  <p><a href="#/stack/{{deck}}">View stack</a>
 </p>
 
